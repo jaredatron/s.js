@@ -1,0 +1,3 @@
+[submodule "vendor/qunit.expect"]
+	path = vendor/qunit.expect
+	url = git://github.com/deadlyicon/qunit.expect.git
