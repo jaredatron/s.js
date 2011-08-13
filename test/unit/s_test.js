@@ -3,9 +3,26 @@
   module("S");
 
   test("S", function() {
-    expect(function(){ S().toString();   }).toThrow('Selector cannot be empty');
-    expect(function(){ S('').toString(); }).toThrow('Selector cannot be empty');
-    expect( S('html')).toEqual('html');
+    var body = S('body');
+
+    // S
+    expect( S         ).toEqual('');
+    expect( S()       ).toEqual('')
+    expect( S('')     ).toEqual('')
+    expect( S('html') ).toEqual('html');
+
+    // end
+    expect( S                              ).toEqual('');
+    expect( S.end                          ).toEqual('');
+    expect( S('html').end                  ).toEqual('');
+    expect( S('html')('body').end          ).toEqual('html');
+    expect( S('html')('body')('div').end   ).toEqual('html body');
+    expect( S('html').end()                ).toEqual('');
+    expect( S('html')('body').end()        ).toEqual('html');
+    expect( S('html')('body')('div').end() ).toEqual('html body');
+
+    // self returning
+    expect( body() ).toBe(body);
 
     // chaining
     expect( S('html body')                  ).toEqual('html body');
@@ -29,6 +46,8 @@
 
     // S takes an S object
     expect( S(S('html'))).toEqual('html');
+
+
 
   });
 
