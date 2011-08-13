@@ -3,48 +3,32 @@
   module("S");
 
   test("S", function() {
-    expect( S().valueOf() ).toBe('');
-    expect( S().toString()).toBe('');
-
-    expect( S('').valueOf() ).toBe('');
-    expect( S('').toString()).toBe('');
-
-    expect( S('html').valueOf() ).toBe('html');
-    expect( S('html').toString()).toBe('html');
+    expect(function(){ S().toString();   }).toThrow('Selector cannot be empty');
+    expect(function(){ S('').toString(); }).toThrow('Selector cannot be empty');
+    expect( S('html')).toEqual('html');
 
     // chaining
-    expect( S('html body').valueOf() ).toBe('html body');
-    expect( S('html body').toString()).toBe('html body');
-
-    expect( S('html body')('section').valueOf() ).toBe('section');
-    expect( S('html body')('section').toString()).toBe('html body section');
-
-    expect( S('html body')('section')('h1').valueOf() ).toBe('h1');
-    expect( S('html body')('section')('h1').toString()).toBe('html body section h1');
+    expect( S('html body')                  ).toEqual('html body');
+    expect( S('html body')('section')       ).toEqual('html body section');
+    expect( S('html body')('section')('h1') ).toEqual('html body section h1');
 
     // &
-    expect( S('a')('&:visible').valueOf() ).toBe('&:visible');
-    expect( S('a')('&:visible').toString()).toBe('a:visible');
-
+    expect( S('a')('&:visible')).toEqual('a:visible');
 
     // ,
-    expect( S('html')('div,span').valueOf()        ).toBe('div, span');
-    expect( S('html')('div,span').toString()       ).toBe('html div, html span');
-    expect( S('head,body')('div').valueOf()        ).toBe('div');
-    expect( S('head,body')('div').toString()       ).toBe('head div, body div');
-    expect( S('head,body')('div,span').valueOf()   ).toBe('div, span');
-    expect( S('head,body')('div,span').toString()  ).toBe('head div, body div, head span, body span');
-    expect( S('html')('div,span')('a,b').toString()).toBe('html div a, html span a, html div b, html span b');
+    expect( S('html')('div,span')        ).toEqual('html div, html span');
+    expect( S('head,body')('div')        ).toEqual('head div, body div');
+    expect( S('head,body')('div,span')   ).toEqual('head div, body div, head span, body span');
+    expect( S('html')('div,span')('a,b') ).toEqual('html div a, html span a, html div b, html span b');
 
     // white space
-    expect( S('  html  ').valueOf() ).toBe('html');
-    expect( S('  html  ').toString()).toBe('html');
-    expect( S('  html  ')('  head  ,  body  ').valueOf() ).toBe('head, body');
-    expect( S('  html  ')('  head  ,  body  ').toString()).toBe('html head, html body');
+    expect( S('  html  ')                      ).toEqual('html');
+    expect( S('  html  ')('  head  ,  body  ') ).toEqual('html head, html body');
+    expect(function(){ S('a,b,').toString(); }).toThrow('Selectors can\'t end in commas. "a,b,"');
+
 
     // S takes an S object
-    expect( S(S('html')).valueOf() ).toBe('html');
-    expect( S(S('html')).toString()).toBe('html');
+    expect( S(S('html'))).toEqual('html');
 
   });
 
