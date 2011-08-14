@@ -59,21 +59,21 @@
   S.js objects are functions but can be passed around like strings:
 
     var
-      WIDGET = S('#widget'),
-      CLOSE  = WIDGET('> .close');
+      widgets = S('.widgets > *'),
+      closers = widgets('> .close');
 
-    WIDGET == '#widget' //-> true;
+    widgets == '.widgets > *' //-> true;
 
-    CLOSE.click(function(close, event){
-      close.closest(WIDGET).hide();
+    closers.click(function(close, event){
+      close.closest(widgets).hide();
     });
 
   Handlers bound via S.js are called in an "improved" way
 
     S('a').click(function(a, event){
       this  //-> <a> DOM node
-      a     //-> a query collection equal to saying $(this)
-      event //-> canonical jQuery event
+      a     //-> $(this)
+      event //-> jQuery.Event
     });
 
 ## Examples
