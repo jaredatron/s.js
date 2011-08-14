@@ -1,9 +1,7 @@
 !function(jQuery, DOCUMENT, undefined){
 
   var
-    HANDLERS = [],
-    HANDLER_WRAPPERS = [],
-    FUNCTIONS_THAT_TAKE_A_SELECTOR = ["find", "filter", "closest", "delegate"],
+    FUNCTIONS_THAT_TAKE_A_SELECTOR = ["find", "filter", "closest", "delegate", "undelegate"],
     EVENTS = [
       "blur", "focus", "focusin", "focusout", "load", "resize", "scroll", "unload", "click", "dblclick",
       "mousedown", "mouseup", "mousemove", "mouseover", "mouseout", "mouseenter", "mouseleave", "change",
@@ -23,26 +21,19 @@
 
     if (typeof data === 'function') fn = data; data = undefined;
 
-    index = HANDLERS.indexOf(fn);
+    fn.sjs_wrapper = fn.sjs_wrapper || function(){
+      arguments = Array.prototype.slice.apply(arguments);
+      arguments.unshift($(this));
+      fn.apply(this, arguments);
+    };
 
-    if (index === -1){
-      HANDLERS.push(fn);
-      index = HANDLERS.indexOf(fn);
-      wrapper = HANDLER_WRAPPERS[index] = function(){
-        arguments = Array.prototype.slice.apply(arguments);
-        arguments.unshift($(this));
-        fn.apply(this, arguments);
-      }
-    }else{
-      wrapper = HANDLER_WRAPPERS[index];
-    }
-
-    DOCUMENT.delegate(this, types, data, wrapper);
+    DOCUMENT.delegate(this, types, data, fn.sjs_wrapper);
     return this;
   };
 
   S.prototype.unbind = function(types, fn){
-    throw 'make unbind work';
+    DOCUMENT.undelegate(this, types, fn.sjs_wrapper || fn);
+    return this;
   };
 
   EVENTS.forEach(function(name) {

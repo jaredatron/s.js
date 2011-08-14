@@ -8,7 +8,7 @@
       "select", "submit", "keydown", "keypress", "keyup", "error"
     ];
 
-  module("$");
+  module("jQuery");
 
   test("$", function() {
 
@@ -22,17 +22,23 @@
     expect( $('html, head, body').toSelector() ).toBeTheSameSelectorAs( S('html, head, body') );
   });
 
-  test("event binding", function(){
-    $('<div class="kangaroo">').appendTo('body')
+  test("events", function(){
+    $('<div class="kangaroo">').appendTo('body');
     EVENTS.forEach(function(type){
-      var occured = false, args
-      S('.kangaroo').bind(type, handler).get().trigger(type).unbind(type);
-      function handler(){ occured = type; args = arguments; }
-      expect(occured).toBe(type);
+      var occured, args;
+      function handler(){ occured = true; args = arguments; }
+
+      occured = false;
+      S('.kangaroo').bind(type, handler).get().trigger(type);
+      expect(occured).toEqual(true);
       expect(args[0]).toBeAnInstanceOf(jQuery);
       expect(args[0][0]).toBe($('.kangaroo')[0]);
       expect(args[1]).toBeAnInstanceOf(jQuery.Event);
       expect(args[1].type).toEqual(type);
+
+      occured = false;
+      S('.kangaroo').unbind(type, handler).get().trigger(type);
+      expect(occured).toEqual(false);
     });
   });
 
