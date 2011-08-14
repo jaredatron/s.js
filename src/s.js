@@ -6,14 +6,20 @@
     COMMA = /\s*,\s*/g,
     TRAILING_COMMA = /,\s*$/;
 
+  global.S = S;
+
   function S(value){
     return Selector(value);
   }
   S.toSelector = S.toString = S.valueOf = function(){ return ''; }
   S.end = S;
 
+  S.prototype.isSelector = true;
+  S.prototype.toSelector = toSelector;
+  S.prototype.toString   = toSelector;
+  S.prototype.valueOf    = toSelector;
+
   function Selector(value, parent) {
-    // if (value === undefined || EMTPY.test(value)) throw 'Selector cannot be empty';
     if (value === undefined) value = '';
     if (typeof value.toString === 'function') value = value.toString();
     validateSelector(value);
@@ -23,18 +29,16 @@
     };
     selector.value = value;
     selector.end = parent ? parent : S;
-    extend(selector, Selector.prototype);
+    extend(selector, S.prototype);
     return selector;
   }
 
-  Selector.prototype.isSelector = true;
-  Selector.prototype.toSelector = function(){
+  function toSelector(){
     var
       self      = this,
       selectors = self.value.split(COMMA);
 
     validateSelector(self.value);
-
     // TODO uniq selectors before returning
     return selectors.map(function(selector, parent_selectors){
       selector = strip(selector);
@@ -49,11 +53,6 @@
 
     }).join(', ');
   }
-  Selector.prototype.toString = Selector.prototype.toSelector;
-  Selector.prototype.valueOf  = Selector.prototype.toSelector;
-
-  global.S = S;
-  global.Selector = Selector;
 
 
   // Helpers
