@@ -21,11 +21,7 @@
 
     if (typeof data === 'function') fn = data; data = undefined;
 
-    fn.sjs_wrapper = fn.sjs_wrapper || function(){
-      arguments = Array.prototype.slice.apply(arguments);
-      arguments.unshift($(this));
-      fn.apply(this, arguments);
-    };
+    wrapEventHandler(fn);
 
     DOCUMENT.delegate(this, types, data, fn.sjs_wrapper);
     return this;
@@ -48,5 +44,13 @@
       return $super.apply(this, arguments);
     };
   });
+
+  function wrapEventHandler(fn){
+    fn.sjs_wrapper = fn.sjs_wrapper || function(){
+      arguments = Array.prototype.slice.apply(arguments);
+      arguments.unshift(jQuery(this));
+      fn.apply(this, arguments);
+    }
+  }
 
 }(jQuery, jQuery(document));

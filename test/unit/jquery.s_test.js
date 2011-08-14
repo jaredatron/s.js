@@ -1,4 +1,4 @@
-!function() {
+!function($, undefined) {
 
   var
     FUNCTIONS_THAT_TAKE_A_SELECTOR = ["find", "filter", "closest", "delegate"],
@@ -22,7 +22,7 @@
     expect( $('html, head, body').toSelector() ).toBeTheSameSelectorAs( S('html, head, body') );
   });
 
-  test("events", function(){
+  test("binding events", function(){
     $('<div class="kangaroo">').appendTo('body');
     EVENTS.forEach(function(type){
       var occured, args;
@@ -42,4 +42,25 @@
     });
   });
 
-}();
+  test("unbinding events", function(){
+    var donkey = $('<div class="donkey">'), events;
+
+    function handler(element, event){ console.log(arguments); events.push(event.type); }
+
+    S('.donkey').bind('eat poop', handler)
+
+    events = [];
+    donkey.trigger('eat').trigger('poop');
+    expect(events.length).toEqual(2);
+    expect(events[0]).toEqual('eat');
+    expect(events[1]).toEqual('poop');
+
+    S('.donkey').unbind('poop', handler);
+
+    events = [];
+    donkey.trigger('eat').trigger('poop');
+    expect(events.length).toEqual(1);
+    expect(events[0]).toEqual('eat');
+  });
+
+}(jQuery);
