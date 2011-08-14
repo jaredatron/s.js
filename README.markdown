@@ -1,6 +1,6 @@
-# S.js
+# [S.js](http://github.com/deadlyicon/s.js)
 
-  S.js is a CSS Selector API that brings the simplicity of SCSS to JavaScript:
+  S.js is a CSS Selector API that brings the simplicity of [SASS](http://sass-lang.com/) to JavaScript:
 
   Complicated selectors are a snap:
 
@@ -18,8 +18,8 @@
       ('.button')
         .focus(function(){ /*…*/ })
         .click(function(){ /*…*/ })
-      .end
-    .end;
+      .end()
+    .end();
 
     // SCSS
     header, footer {
@@ -29,7 +29,7 @@
       }
     }
 
-## S.js and jQuery
+## [S.js](http://github.com/deadlyicon/s.js) and [jQuery](http://www.jquery.com)
 
 ### Querying
 
@@ -82,15 +82,9 @@
       ('body')        //-> 'html body'
         ('a')         //-> 'html body a'
           ('&:hover)  //-> 'html body a:hover'
-        .end          //-> 'html body a'
+        .end()        //-> 'html body a'
         ('div')       //-> 'html body div'
           ('&:hover)  //-> 'html body div:hover'
-        .end          //-> 'html body div'
-      .end            //-> 'html body'
-    .end;             //-> 'html'
-
-
-
-### Author
-
-  S.js was written by Jared Grippe [jared@jaredgrippe.me](http://jaredgrippe.me)
+        .end()        //-> 'html body div'
+      .end()          //-> 'html body'
+    .end();           //-> 'html'
