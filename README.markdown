@@ -10,7 +10,8 @@
     // can also be said like this:
     S('header,footer')('a')('&:active,&:hover');
 
-  Nesting selectors and declaring behaviors in JavaScript is now as easy as it is in SCSS
+  Nesting selectors and declaring behaviors in JavaScript is now as easy as Nesting selectors
+  and declaring styles in SCSS
 
     // JavaScript
     S('header, footer')
@@ -30,7 +31,10 @@
 
 ## S.js and jQuery
 
-  S.js can be thought of being a layer on top of jQuery in the same way jQuery lives on top of the DOM.
+### Querying
+
+  S.js can be thought of as being a layer on top of jQuery in the same way jQuery lives on top
+  of the DOM.
 
     S('body');             //-> the "body" selector
     S('body').get();       //-> a jQuery collection containing the <body> DOM node
@@ -42,7 +46,10 @@
     S('body').get(); //-> jQuery[<body>]
     $(S('body'));    //-> jQuery[<body>]
 
-  S.js wraps jQuery's event delegation (live) enabling even more terse selector behavior declaration.
+### Events
+
+  S.js wraps jQuery's event delegation (live) enabling even more terse selector behavior
+  declaration.
 
     // jQuery
     $('a').live('click', function(){ /*…*/ });
@@ -60,6 +67,28 @@
     CLOSE.click(function(close, event){
       close.closest(WIDGET).hide();
     });
+
+  Handlers bound via S.js are called in an "improved" way
+
+    S('a').click(function(a, event){
+      this  //-> <a> DOM node
+      a     //-> a query collection equal to saying $(this)
+      event //-> canonical jQuery event
+    });
+
+## Examples
+
+    S('html')         //-> 'html'
+      ('body')        //-> 'html body'
+        ('a')         //-> 'html body a'
+          ('&:hover)  //-> 'html body a:hover'
+        .end          //-> 'html body a'
+        ('div')       //-> 'html body div'
+          ('&:hover)  //-> 'html body div:hover'
+        .end          //-> 'html body div'
+      .end            //-> 'html body'
+    .end;             //-> 'html'
+
 
 
 ### Author
